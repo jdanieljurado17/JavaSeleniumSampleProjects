@@ -26,6 +26,8 @@ public class MainPage {
     WebElement contactButton;
     @FindBy(id = "signin2")
     WebElement signUpButton;
+    @FindBy(id = "cartur")
+    WebElement cartButton;
 
     //Locators for contact form
     @FindBy(id = "recipient-email")
@@ -37,9 +39,9 @@ public class MainPage {
     @FindBy(xpath = "//button[@onclick='send()']")
     WebElement contactButtonConfirmation;
 
-    // Products locator
-    @FindBy(linkText = "Samsung galaxy s6")
-    WebElement samsungS6;
+    //Locators for Slider
+    @FindBy(xpath = "//span[@class='carousel-control-prev-icon']")
+    WebElement prevIconButton;
 
     // Sign Up Locators methods
     public WebElement signUpButton(){
@@ -71,4 +73,7 @@ public class MainPage {
     public WebElement contactButtonConfirmation(){
         return contactButtonConfirmation;
     }
+
+    //Methods for nav - bar locators
+    public WebElement cartButton(){return cartButton;}
 }

@@ -24,6 +24,11 @@ public class CategoryProductsPage {
     //Phone Products
     @FindBy(linkText = "Samsung galaxy s7")
     WebElement galaxyS7;
+    @FindBy(linkText = "Samsung galaxy s6")
+    WebElement galaxyS6;
+    //Add to cart galaxy s6
+    @FindBy(xpath = "//a[@onclick='addToCart(1)']")
+    WebElement addToCartS6;
 
     //Laptops Products
     @FindBy(linkText = "MacBook Pro")
@@ -50,6 +55,10 @@ public class CategoryProductsPage {
     public WebElement galaxyS7(){
         return galaxyS7;
     }
+    public WebElement galaxyS6() {
+        return galaxyS6;
+    }
+    public WebElement addToCartS6(){return addToCartS6;}
 
 
     // Laptops Products methods

@@ -1,8 +1,10 @@
 package TestCases;
 
+import PageObjects.CartPage;
 import PageObjects.CategoryProductsPage;
 import PageObjects.LogInPage;
 import PageObjects.MainPage;
+import com.sun.rmi.rmid.ExecOptionPermission;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -26,6 +28,11 @@ public class TestCasesDemoBlaze {
     String email = "thisemail@example.com";
     String name = "Joe Smith";
     String message = "This is a message hehehe";
+    String country = "USA";
+    String city = "Buffalo";
+    String creditCard = "0000000";
+    String expMonth = "00";
+    String expYear = "00";
 
 
 
@@ -34,7 +41,6 @@ public class TestCasesDemoBlaze {
         System.setProperty("webdriver.chrome.driver",".\\src\\main\\resources\\Drivers\\chromedriver.exe");
         driver = new ChromeDriver();
         driver.get(baseUrl);
-
     }
 
     @Test(priority = 1)
@@ -131,6 +137,73 @@ public class TestCasesDemoBlaze {
         cP.monitorsCategory().click();
         System.out.println(cP.appleMonitor().getText());
         Assert.assertEquals(cP.appleMonitor().getText(), "Apple monitor 24");
+    }
+
+    @Test(priority = 7)
+    public void addingProducts(){
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+        CategoryProductsPage cP = new CategoryProductsPage(driver);
+        CartPage cart = new CartPage(driver);
+        MainPage mP = new MainPage(driver);
+        cP.galaxyS6().click();
+        cP.addToCartS6().click();
+        wait.until(ExpectedConditions.alertIsPresent());
+        driver.switchTo().alert().accept();
+        mP.cartButton().click();
+        cart.s6Added().isDisplayed();
+    }
+
+    @Test(priority = 8)
+    public void deletingProducts() throws InterruptedException {
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+        CategoryProductsPage cP = new CategoryProductsPage(driver);
+        CartPage cart = new CartPage(driver);
+        MainPage mP = new MainPage(driver);
+        cP.galaxyS6().click();
+        cP.addToCartS6().click();
+        wait.until(ExpectedConditions.alertIsPresent());
+        driver.switchTo().alert().accept();
+        mP.cartButton().click();
+        cart.s6Added().isDisplayed();
+        cart.deleteButton().click();
+        Thread.sleep(3000); //Ask how to check that element was actually deleted.
+    }
+    @Test(priority = 9)
+    public void buyingItem(){
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+        //Creating objects of Page Objects
+        CategoryProductsPage cP = new CategoryProductsPage(driver);
+        CartPage cart = new CartPage(driver);
+        MainPage mP = new MainPage(driver);
+        CartPage cartP = new CartPage(driver);
+
+        cP.galaxyS6().click();
+        cP.addToCartS6().click();
+        wait.until(ExpectedConditions.alertIsPresent());
+        driver.switchTo().alert().accept();
+        mP.cartButton().click();
+        cart.s6Added().isDisplayed();
+        String totalCart = cartP.totalCart().getText();
+        cartP.placeOrderButton().click();
+        wait.until(ExpectedConditions.visibilityOf(cartP.totalModal()));
+        Assert.assertEquals(cartP.totalModal().getText(), "Total: " + totalCart); //Assert.assertEquals(cP.appleMonitor().getText(), "Apple monitor 24");
+        cartP.nameCardHolder().sendKeys(name);
+        cartP.countryCardHolder().sendKeys(country);
+        cartP.cityCardHolder().sendKeys(city);
+        cartP.numberCard().sendKeys(creditCard);
+        cartP.monthCard().sendKeys(expMonth);
+        cartP.yearCard().sendKeys(expYear);
+        cartP.purchaseButton().click();
+        cartP.confirmButton().click();
     }
 
     @AfterTest
